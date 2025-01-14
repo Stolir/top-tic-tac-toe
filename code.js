@@ -13,13 +13,8 @@ const gameBoard = function(){
 
     const getBoard = () => board;
 
-    const placeMarker = (row, column, marker) => {
-        if (board[row][column] === " ") {
-            board[row][column] = marker;
-        }
-        else {
-            console.log('Invalid move. Please choose an empty cell to place your marker.')
-        }
+    const placeMarker = (row, column, marker, playerMarkers) => {
+        board[row][column] = marker;
     }
     
     const displayBoard = () => {
@@ -44,6 +39,7 @@ function makePlayer(name, marker){
 
 
 const gameController = function(playerOneName = "Player One", playerTwoName = "Player Two"){
+
     const players = [];
 
     const playerOne = players.push(makePlayer(playerOneName, "X"));
@@ -69,18 +65,53 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
         }
     }
 
+    const checkWin = (markers) => {
+        winConditions = {
+            "horizontal": {
+                "row0":[[0,0], [0,1], [0,2]],
+                "row1":[[1,0], [1,1], [1,2]],
+                "row2":[[2,0], [2,1], [2,2]] 
+            }, 
+            "vertical": {
+                "col0":[[0,0], [1,0], [2,0]],
+                "col1":[[0,1], [1,1], [2,1]],
+                "col2":[[0,2], [1,2], [2,2]]
+            },
+            "diagonal": {
+                "leftToRgiht": [[0,0],[1,1],[2,2]],
+                "rightToLeft": [[0,2],[1,1],[2,0]]
+            }
+        }
+
+        for (const direction of Object.values(winConditions)) {
+            for (const instance of Object.values(direction)){
+              if (markers.every((pair) => instance.includes(pair))) {
+                return true;
+              }  
+            }
+        }
+        return false;
+    };
+
     const playRound = (row, column) => {
+        const board = gameBoard.getBoard();
         console.log(`Placing ${currentTurn.name}'s marker ${currentTurn.getMarker()} on cell (${row}, ${column})`)
-        currentTurn.markerLocations.push([row, column])
-        gameBoard.placeMarker(row, column, currentTurn.getMarker())
-        gameBoard.displayBoard();
-        const gameWon = checkWin(currentTurn.markerLocations)
-        if (!gameWon) {
-            switchTurns();
+        if (board[row][column] === " ") {
+            currentTurn.markerLocations.push([row, column]);
+            gameBoard.placeMarker(row, column, currentTurn.getMarker(), currentTurn.markerLocations)
+            gameBoard.displayBoard();
+            const gameWon = checkWin(currentTurn.markerLocations)
+            if (!gameWon) {
+                switchTurns();
+            }
+            else {
+                console.log(`${currentTurn.name} Won!`)
+            }
         }
         else {
-            console.log(`${currentTurn.name} Won!`)
+            console.log("Invalid move. Please choose an empty cell.")
         }
+
         
     }
 
