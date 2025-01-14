@@ -1,0 +1,30 @@
+const gameBoard = function(){
+    const board = [];
+
+    // for each row make 3 cells 
+    const makeBoard = () => { 
+        for (let i = 0; i < 3; i++) {
+            board[i] = [];
+            for (j = 0; j < 3; j++) {
+                board[i][j] = " ";
+            }
+        }
+    }
+
+    const getBoard = () => board;
+
+    const placeMarker = (row, column, marker) => {
+        if (board[row][column] === " ") {
+            board[row][column] = marker;
+        }
+        else {
+            console.log('Invalid move. Please choose an empty cell to place your marker.')
+        }
+    }
+    
+    const displayBoard = () => {
+        board.forEach(cell => console.log(cell))
+    }
+    return {makeBoard, getBoard, placeMarker, displayBoard}
+}();
+
