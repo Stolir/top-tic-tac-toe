@@ -67,25 +67,35 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
 
     const checkWin = (markers) => {
         winConditions = {
-            "horizontal": {
+            horizontal: {
                 "row0":[[0,0], [0,1], [0,2]],
                 "row1":[[1,0], [1,1], [1,2]],
                 "row2":[[2,0], [2,1], [2,2]] 
             }, 
-            "vertical": {
+            vertical: {
                 "col0":[[0,0], [1,0], [2,0]],
                 "col1":[[0,1], [1,1], [2,1]],
                 "col2":[[0,2], [1,2], [2,2]]
             },
-            "diagonal": {
-                "leftToRgiht": [[0,0],[1,1],[2,2]],
+            diagonal: {
+                "leftToRight": [[0,0],[1,1],[2,2]],
                 "rightToLeft": [[0,2],[1,1],[2,0]]
             }
         }
 
+        // if (markers.every(pair => (winConditions.diagonal["leftToRight"].some((value) => {
+        //     console.log(`${JSON.stringify(value)} ==? ${JSON.stringify(pair)}`)
+        //     JSON.stringify(value) === JSON.stringify(pair)
+        // })))) {
+        //     return true;
+        // }
+
         for (const direction of Object.values(winConditions)) {
             for (const instance of Object.values(direction)){
-              if (markers.every((pair) => instance.includes(pair))) {
+              if (markers.every(pair => instance.some(value => {
+                console.log(`${JSON.stringify(value)} ==? ${JSON.stringify(pair)}`)
+                JSON.stringify(value) === JSON.stringify(pair);
+              }))) {
                 return true;
               }  
             }
@@ -97,7 +107,7 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
         const board = gameBoard.getBoard();
         console.log(`Placing ${currentTurn.name}'s marker ${currentTurn.getMarker()} on cell (${row}, ${column})`)
         if (board[row][column] === " ") {
-            currentTurn.markerLocations.push([row, column]);
+            currentTurn.markerLocations.push([[row], [column]]);
             gameBoard.placeMarker(row, column, currentTurn.getMarker(), currentTurn.markerLocations)
             gameBoard.displayBoard();
             const gameWon = checkWin(currentTurn.markerLocations)
