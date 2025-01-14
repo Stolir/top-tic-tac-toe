@@ -56,5 +56,35 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
         gameBoard.makeBoard();
         gameBoard.displayBoard();
     };
-    
+
+    const switchTurns = () => {
+        if (currentTurn === players[0]) {
+            currentTurn = players[1];
+            console.log(`${currentTurn.name}'s Turn!`);
+
+        }
+        else {
+            currentTurn = players[0];
+            console.log(`${currentTurn.name}'s Turn!`);
+        }
+    }
+
+    const playRound = (row, column) => {
+        console.log(`Placing ${currentTurn.name}'s marker ${currentTurn.getMarker()} on cell (${row}, ${column})`)
+        currentTurn.markerLocations.push([row, column])
+        gameBoard.placeMarker(row, column, currentTurn.getMarker())
+        gameBoard.displayBoard();
+        const gameWon = checkWin(currentTurn.markerLocations)
+        if (!gameWon) {
+            switchTurns();
+        }
+        else {
+            console.log(`${currentTurn.name} Won!`)
+        }
+        
+    }
+
+    startGame();
+
+    return {startGame, playRound}
 }();
