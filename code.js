@@ -41,3 +41,20 @@ function makePlayer(name, marker){
     let markerLocations = []; 
     return {name, getScore, increaseScore, resetScore, getMarker, toggleMarker, markerLocations}
 }
+
+
+const gameController = function(playerOneName = "Player One", playerTwoName = "Player Two"){
+    const players = [];
+
+    const playerOne = players.push(makePlayer(playerOneName, "X"));
+    const playerTwo = players.push(makePlayer(playerTwoName, "O"));
+
+    let currentTurn = players[0];
+
+    const startGame = () => {
+        console.log(`Game starting!\n${currentTurn.name}'s Turn!`);
+        gameBoard.makeBoard();
+        gameBoard.displayBoard();
+    };
+    
+}();
