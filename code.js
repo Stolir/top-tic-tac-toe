@@ -28,3 +28,16 @@ const gameBoard = function(){
     return {makeBoard, getBoard, placeMarker, displayBoard}
 }();
 
+function makePlayer(name, marker){
+
+    let score = 0;
+    const getScore = () => score;
+    const increaseScore = () => score++;
+    const resetScore = () => score = 0;
+
+    const getMarker = () => marker;
+    const toggleMarker = () => marker = marker === "X" ? "O" : "X";
+
+    let markerLocations = []; 
+    return {name, getScore, increaseScore, resetScore, getMarker, toggleMarker, markerLocations}
+}
