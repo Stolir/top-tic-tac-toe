@@ -88,7 +88,7 @@ body {
     padding-left: 10px;
 }
 
-.name-form button {
+.name-form button, .button-container button {
     background-color: rgb(0, 0, 0, 0);
     color: white;
     font-weight: 300;
@@ -154,6 +154,25 @@ button, input{
     border: none;
 }
 
-input:focus {
+input:focus, button:focus {
     outline: none;
+    border: none;
+}
+
+.button-container {
+    margin-top: 15px;
+    gap: 7px;
+}
+
+.button-container button {
+    font-family: "Raleway", serif;
+    font-size: 24px;
+}
+
+.button-container button:hover {
+    cursor: pointer;
+}
+
+button:disabled {
+    color: grey;
 }

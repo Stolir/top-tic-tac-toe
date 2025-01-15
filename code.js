@@ -57,6 +57,7 @@ const gameController = function() {
         gameBoard.makeBoard();
         gameBoard.displayBoard();
         UIController.updateBoard();
+        UIController.updatePlayerInfo(players);
     };
 
     const playAgain = () => {
@@ -125,6 +126,7 @@ const gameController = function() {
                 currentTurn.increaseScore()
                 console.log(`The score is ${players[0].getScore()}-${players[1].getScore()}`)
                 players.forEach(player => player.markerLocations = [])
+                UIController.updatePlayerInfo(players, true);
             }
             UIController.updateBoard();
         }
@@ -141,6 +143,7 @@ const UIController = function() {
     const nameForm = document.querySelector('.name-form');
     const playerOne = document.querySelector('#playerOne');
     const playerTwo = document.querySelector('#playerTwo');
+    const gameButtons = document.querySelectorAll('.button-container button')
 
     const board = gameBoard.getBoard();
 
@@ -184,6 +187,14 @@ const UIController = function() {
             gameController.assignPlayers(playerOneName, playerTwoName);
             gameController.startGame();
         })
+
+        const resetButton = gameButtons[0];
+        resetButton.addEventListener('click', gameController.resetGame)
+
+        const playAgainButton = gameButtons[1];
+        playAgainButton.addEventListener('click', () => {
+            gameController.playAgain()
+        })
     }();
 
     const updateBoard = () => {
@@ -197,9 +208,21 @@ const UIController = function() {
         }
     }
 
-    const displayPlayerInfo = () => {
+    const updatePlayerInfo = (players, activateButton = false) => {
+        const scores = document.querySelectorAll('.score');
+        let i = 0;
+        scores.forEach((score) => {
+            score.textContent = `${players[i].getScore()}`
+            i++;
+        })
 
+        if (activateButton) {
+            const playAgainButton = gameButtons[1].disabled = false;
+        }
+        else {
+            const playAgainButton = gameButtons[1].disabled = true;
+        }
     }
 
-    return {updateBoard, playerOneName, playerTwoName}
+    return {updateBoard, updatePlayerInfo, playerOneName, playerTwoName}
 }();
