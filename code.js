@@ -42,8 +42,8 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
 
     const players = [];
 
-    const playerOne = players.push(makePlayer(playerOneName, "X"));
-    const playerTwo = players.push(makePlayer(playerTwoName, "O"));
+    players.push(makePlayer(playerOneName, "X"));
+    players.push(makePlayer(playerTwoName, "O"));
 
     let currentTurn = players[0];
 
@@ -52,6 +52,25 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
         gameBoard.makeBoard();
         gameBoard.displayBoard();
     };
+
+    const playAgain = () => {
+        console.log(`Playing again! Markers switched!`)
+        players.forEach(player => player.toggleMarker())  
+        if (players[0].getMarker() === "X") {
+            currentTurn = players[0];
+        }
+        else {
+            currentTurn = players[1];
+        }
+        startGame()
+    }
+
+    const resetGame = () => {
+        console.log(`Reseting game! Scores will be reset...`)
+        currentTurn = players[0];
+        players.forEach(player => player.resetScore());
+        startGame();
+    }
 
     const switchTurns = () => {
         if (currentTurn === players[0]) {
@@ -93,11 +112,15 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
             currentTurn.markerLocations.push(`(${[row]},${[column]})`);
             gameBoard.placeMarker(row, column, currentTurn.getMarker(), currentTurn.markerLocations)
             gameBoard.displayBoard();
+
+            // if game won do not switch turns 
             if (!checkWin(currentTurn.markerLocations)) {
                 switchTurns();
             }
             else {
                 console.log(`${currentTurn.name} Won!`)
+                currentTurn.increaseScore()
+                console.log(`The score is ${players[0].getScore()}-${players[1].getScore()}`)
             }
         }
         else {
@@ -109,5 +132,5 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
 
     startGame();
 
-    return {startGame, playRound}
+    return {startGame, playRound, playAgain, resetGame}
 }();
