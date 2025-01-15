@@ -38,7 +38,7 @@ function makePlayer(name, marker){
 }
 
 
-const gameController = function(playerOneName = "Player One", playerTwoName = "Player Two") {
+const gameController = (playerOneName, playerTwoName) => {
 
     const players = [];
 
@@ -51,6 +51,7 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
         console.log(`Game starting!\n${currentTurn.name}'s Turn!`);
         gameBoard.makeBoard();
         gameBoard.displayBoard();
+        UIController.updateBoard();
     };
 
     const playAgain = () => {
@@ -120,6 +121,7 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
                 console.log(`The score is ${players[0].getScore()}-${players[1].getScore()}`)
                 players.forEach(player => player.markerLocations = [])
             }
+            UIController.updateBoard();
         }
         else {
             console.log("Invalid move. Please choose an empty cell.")
@@ -129,4 +131,39 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
     startGame();
 
     return {startGame, playRound, playAgain, resetGame}
+};
+
+const UIController = function() {
+    const UIBoard = document.querySelector('.game-board');
+    const nameForm = document.querySelector('.name-form');
+    const playerOne = document.querySelector('#playerOne');
+    const playerTwo = document.querySelector('#playerTwo');
+    const board = gameBoard.getBoard();
+
+    let playerOneName = 'Player One';
+    let playerTwoName = 'Player Two';
+    const eventHandler = function() {
+        const nextButton = nameForm.querySelector('.player1form button');
+        nextButton.addEventListener('click', () => {
+            playerOneName = nameForm.querySelector('.player1form input').value;
+            nameForm.querySelector('.player1form').classList.toggle('hidden')
+            nameForm.querySelector('.player2form').classList.toggle('hidden')
+        })
+
+        const backButton = nameForm.querySelector('.player2form button:first-child');
+        backButton.addEventListener('click', () => {
+            nameForm.querySelector('.player1form').classList.toggle('hidden')
+            nameForm.querySelector('.player2form').classList.toggle('hidden')
+        })
+
+        const startButton = nameForm.querySelector('.player2form button:last-child');
+        startButton.addEventListener('click', () => {
+            playerTwoName = nameForm.querySelector('.player2form input').value;
+            nameForm.classList.toggle('hidden');
+            document.querySelector('.main-container').classList.toggle('hidden');
+            playerOne.querySelector('span:first-child').textContent = `${playerOneName}`
+            playerTwo.querySelector('span:first-child').textContent = `${playerTwoName}`
+            gameController(playerOneName, playerTwoName)
+        })
+    }();
 }();

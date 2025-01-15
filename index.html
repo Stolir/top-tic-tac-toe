@@ -3,10 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tic-Tac-Toe</title>
     <script src="code.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+    <div class="flex-col name-form">
+        <div class="flex-row player1form">
+            <input type="text" name="player-one-name" id="player-one-name" placeholder="Player one name" maxlength="20">
+            <button type="button"><img src="assets/arrow-right.svg" alt="arrow-pointing-right" width="30px"></button>
+        </div>
+        <div class="flex-row player2form hidden">
+            <button type="button"><img src="assets/arrow-left.svg" alt="arrow-pointing-left" width="30px"></button>
+            <input type="text" name="player-two-name" id="player-two-name" placeholder="Player two name" maxlength="20">
+            <button type="button">Start game</button>
+        </div>
+
+    </div>
+
+    <div class="grid main-container hidden">
+        <div class="game-board-border">
+            <div class="grid game-board">
+            
+            </div>
+        </div>
+        <div class="player-info flex-row">
+            <div id="playerOne" class="flex-col">
+                <div><span class="player-name"></span> <span class="current-turn"><img src="assets/crown.svg" alt="crown-icon" width="20px"></span></div>
+                <div class="score" id="PlayerOneScore">0</div>
+            </div>
+            <div id="playerTwo" class="flex-col">
+                <div><span class="player-name"></span> <span class="current-turn"><img src="assets/crown.svg" alt="crown-icon" width="20px"></span></div>
+                <div class="score" id="PlayerTwoScore">0</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
