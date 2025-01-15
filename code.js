@@ -166,4 +166,33 @@ const UIController = function() {
             gameController(playerOneName, playerTwoName)
         })
     }();
+
+    const makeBoard = function() {
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board.length; j++) {
+                const cell = document.createElement('button');
+                cell.textContent = board[i][j];
+                cell.setAttribute("class", "board-cell");
+                cell.setAttribute("type", "button")
+                UIBoard.appendChild(cell);
+            }
+        }
+    }();
+
+    const updateGame = () => {
+        const cells = UIBoard.querySelectorAll('button')
+        let counter = 0;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board.length; j++) {
+                cells[counter].textContent = board[i][j];
+                counter++;
+            }
+        }
+    }
+
+    const displayPlayerInfo = () => {
+
+    }
+
+    return {}
 }();
