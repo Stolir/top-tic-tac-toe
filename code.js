@@ -20,6 +20,8 @@ const gameBoard = function(){
     const displayBoard = () => {
         board.forEach(cell => console.log(cell))
     }
+
+    makeBoard();
     return {makeBoard, getBoard, placeMarker, displayBoard}
 }();
 
@@ -138,10 +140,25 @@ const UIController = function() {
     const nameForm = document.querySelector('.name-form');
     const playerOne = document.querySelector('#playerOne');
     const playerTwo = document.querySelector('#playerTwo');
+
     const board = gameBoard.getBoard();
 
     let playerOneName = 'Player One';
     let playerTwoName = 'Player Two';
+
+    const makeBoard = function() {
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board.length; j++) {
+                const cell = document.createElement('button');
+                cell.textContent = board[i][j];
+                cell.setAttribute("class", "board-cell");
+                cell.setAttribute("type", "button")
+                UIBoard.appendChild(cell);
+            }
+        }
+    }();
+
+
     const eventHandler = function() {
         const nextButton = nameForm.querySelector('.player1form button');
         nextButton.addEventListener('click', () => {
@@ -167,19 +184,7 @@ const UIController = function() {
         })
     }();
 
-    const makeBoard = function() {
-        for (let i = 0; i < board.length; i++) {
-            for (let j = 0; j < board.length; j++) {
-                const cell = document.createElement('button');
-                cell.textContent = board[i][j];
-                cell.setAttribute("class", "board-cell");
-                cell.setAttribute("type", "button")
-                UIBoard.appendChild(cell);
-            }
-        }
-    }();
-
-    const updateGame = () => {
+    const updateBoard = () => {
         const cells = UIBoard.querySelectorAll('button')
         let counter = 0;
         for (let i = 0; i < board.length; i++) {
@@ -194,5 +199,5 @@ const UIController = function() {
 
     }
 
-    return {}
+    return {updateBoard}
 }();
