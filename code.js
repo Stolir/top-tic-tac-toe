@@ -1,7 +1,7 @@
 const gameBoard = function(){
     const board = [];
 
-    // for each row make 3 cells 
+    // for each row make 3 cells (3x3 tic-tac-toe board)
     const makeBoard = () => { 
         for (let i = 0; i < 3; i++) {
             board[i] = [];
@@ -13,7 +13,7 @@ const gameBoard = function(){
 
     const getBoard = () => board;
 
-    const placeMarker = (row, column, marker, playerMarkers) => {
+    const placeMarker = (row, column, marker) => {
         board[row][column] = marker;
     }
     
@@ -69,6 +69,9 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
         console.log(`Reseting game! Scores will be reset...`)
         currentTurn = players[0];
         players.forEach(player => player.resetScore());
+        if (players[0].getMarker === "O") {
+            players.forEach(player => player.toggleMarker())
+        }
         startGame();
     }
 
@@ -76,7 +79,6 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
         if (currentTurn === players[0]) {
             currentTurn = players[1];
             console.log(`${currentTurn.name}'s Turn!`);
-
         }
         else {
             currentTurn = players[0];
@@ -95,14 +97,11 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
                 ["(0,0)", "(1,1)", "(2,2)"],
                 ["(0,2)", "(1,1)", "(2,0)"]
         ]
-
-
         for (const condition of winConditions) {
             if (condition.every(condition => markers.includes(condition))) {
                 return true;
             }
         }
-
     };
 
     const playRound = (row, column) => {
@@ -112,8 +111,6 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
             currentTurn.markerLocations.push(`(${[row]},${[column]})`);
             gameBoard.placeMarker(row, column, currentTurn.getMarker(), currentTurn.markerLocations)
             gameBoard.displayBoard();
-
-            // if game won do not switch turns 
             if (!checkWin(currentTurn.markerLocations)) {
                 switchTurns();
             }
@@ -121,13 +118,12 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
                 console.log(`${currentTurn.name} Won!`)
                 currentTurn.increaseScore()
                 console.log(`The score is ${players[0].getScore()}-${players[1].getScore()}`)
+                players.forEach(player => player.markerLocations = [])
             }
         }
         else {
             console.log("Invalid move. Please choose an empty cell.")
-        }
-
-        
+        } 
     }
 
     startGame();
