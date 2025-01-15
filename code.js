@@ -66,27 +66,34 @@ const gameController = function(playerOneName = "Player One", playerTwoName = "P
     }
 
     const checkWin = (markers) => {
-        winConditions = {
-                "row0":[[0,0], [0,1], [0,2]],
-                "row1":[[1,0], [1,1], [1,2]],
-                "row2":[[2,0], [2,1], [2,2]],
-                "col0":[[0,0], [1,0], [2,0]],
-                "col1":[[0,1], [1,1], [2,1]],
-                "col2":[[0,2], [1,2], [2,2]],
-                "leftToRight": [[0,0],[1,1],[2,2]],
-                "rightToLeft": [[0,2],[1,1],[2,0]]
+        winConditions = [
+                ["(0,0)", "(0,1)", "(0,2)"],
+                ["(1,0)", "(1,1)", "(1,2)"],
+                ["(2,0)", "(2,1)", "(2,2)"],
+                ["(0,0)", "(1,0)", "(2,0)"],
+                ["(0,1)", "(1,1)", "(2,1)"],
+                ["(0,2)", "(1,2)", "(2,2)"],
+                ["(0,0)", "(1,1)", "(2,2)"],
+                ["(0,2)", "(1,1)", "(2,0)"]
+        ]
+
+
+        for (const condition of winConditions) {
+            if (condition.every(condition => markers.includes(condition))) {
+                return true;
+            }
         }
+
     };
 
     const playRound = (row, column) => {
         const board = gameBoard.getBoard();
         console.log(`Placing ${currentTurn.name}'s marker ${currentTurn.getMarker()} on cell (${row}, ${column})`)
         if (board[row][column] === " ") {
-            currentTurn.markerLocations.push([[row], [column]]);
+            currentTurn.markerLocations.push(`(${[row]},${[column]})`);
             gameBoard.placeMarker(row, column, currentTurn.getMarker(), currentTurn.markerLocations)
             gameBoard.displayBoard();
-            const gameWon = checkWin(currentTurn.markerLocations)
-            if (!gameWon) {
+            if (!checkWin(currentTurn.markerLocations)) {
                 switchTurns();
             }
             else {
