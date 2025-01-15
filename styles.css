@@ -122,6 +122,8 @@ body {
 
 .board-cell {
     background-color: black;
+    color: white;
+    font-weight: 900;
 }
 
 

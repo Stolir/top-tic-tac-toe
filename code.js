@@ -40,14 +40,17 @@ function makePlayer(name, marker){
 }
 
 
-const gameController = (playerOneName, playerTwoName) => {
+const gameController = function() {
 
     const players = [];
+    let currentTurn;
 
-    players.push(makePlayer(playerOneName, "X"));
-    players.push(makePlayer(playerTwoName, "O"));
+    const assignPlayers = (playerOneName, playerTwoName) => {    
+        players.push(makePlayer(playerOneName, "X"));
+        players.push(makePlayer(playerTwoName, "O"));
 
-    let currentTurn = players[0];
+        currentTurn = players[0];
+    };
 
     const startGame = () => {
         console.log(`Game starting!\n${currentTurn.name}'s Turn!`);
@@ -130,10 +133,8 @@ const gameController = (playerOneName, playerTwoName) => {
         } 
     }
 
-    startGame();
-
-    return {startGame, playRound, playAgain, resetGame}
-};
+    return {assignPlayers, startGame, playRound, playAgain, resetGame}
+}();
 
 const UIController = function() {
     const UIBoard = document.querySelector('.game-board');
@@ -178,9 +179,10 @@ const UIController = function() {
             playerTwoName = nameForm.querySelector('.player2form input').value;
             nameForm.classList.toggle('hidden');
             document.querySelector('.main-container').classList.toggle('hidden');
-            playerOne.querySelector('span:first-child').textContent = `${playerOneName}`
-            playerTwo.querySelector('span:first-child').textContent = `${playerTwoName}`
-            gameController(playerOneName, playerTwoName)
+            playerOne.querySelector('span:first-child').textContent = `${playerOneName}`;
+            playerTwo.querySelector('span:first-child').textContent = `${playerTwoName}`;
+            gameController.assignPlayers(playerOneName, playerTwoName);
+            gameController.startGame();
         })
     }();
 
@@ -199,5 +201,5 @@ const UIController = function() {
 
     }
 
-    return {updateBoard}
+    return {updateBoard, playerOneName, playerTwoName}
 }();
