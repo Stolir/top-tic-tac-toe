@@ -118,15 +118,23 @@ const gameController = function() {
             currentTurn.markerLocations.push(`(${[row]},${[column]})`);
             gameBoard.placeMarker(row, column, currentTurn.getMarker(), currentTurn.markerLocations)
             gameBoard.displayBoard();
-            if (!checkWin(currentTurn.markerLocations)) {
-                switchTurns();
-            }
-            else {
+            if (checkWin(currentTurn.markerLocations)){
                 console.log(`${currentTurn.name} Won!`)
+                UIController.announceGameState(`${currentTurn.name} Won!`)
                 currentTurn.increaseScore()
                 console.log(`The score is ${players[0].getScore()}-${players[1].getScore()}`)
                 players.forEach(player => player.markerLocations = [])
                 UIController.updatePlayerInfo(players, true);
+            }
+            // check for tie
+            else if (!checkWin(currentTurn.markerLocations) && (board.flat().every(cell => cell !== " "))) {
+                UIController.announceGameState(`Tie!`);
+                players.forEach(player => player.markerLocations = []);
+                UIController.updatePlayerInfo(players, true);
+            }
+            else {
+                switchTurns();
+                UIController.switchTurns();
             }
             UIController.updateBoard();
         }
@@ -143,7 +151,8 @@ const UIController = function() {
     const nameForm = document.querySelector('.name-form');
     const playerOne = document.querySelector('#playerOne');
     const playerTwo = document.querySelector('#playerTwo');
-    const gameButtons = document.querySelectorAll('.button-container button')
+    const announcements = document.querySelector('#announcements');
+    const gameButtons = document.querySelectorAll('.button-container button');
 
     const board = gameBoard.getBoard();
 
@@ -169,6 +178,9 @@ const UIController = function() {
         }
     }();
 
+
+    // select created board cells for further usage
+    const cells = UIBoard.querySelectorAll('button');
 
     const eventHandler = function() {
         const nextButton = nameForm.querySelector('.player1form button');
@@ -196,11 +208,18 @@ const UIController = function() {
         })
 
         const resetButton = gameButtons[0];
-        resetButton.addEventListener('click', gameController.resetGame)
+        resetButton.addEventListener('click', () => {
+            gameController.resetGame();
+            announcements.classList.add('soft-hide');
+            cells.forEach(cell => cell.disabled = false)
+        })
 
         const playAgainButton = gameButtons[1];
         playAgainButton.addEventListener('click', () => {
-            gameController.playAgain()
+            gameController.playAgain();
+            announcements.classList.add('soft-hide');
+            cells.forEach(cell => cell.disabled = false)
+
         })
     }();
 
@@ -216,6 +235,7 @@ const UIController = function() {
     }
 
     const updatePlayerInfo = (players, activateButton = false) => {
+
         const scores = document.querySelectorAll('.score');
         let i = 0;
         scores.forEach((score) => {
@@ -231,5 +251,17 @@ const UIController = function() {
         }
     }
 
-    return {updateBoard, updatePlayerInfo, playerOneName, playerTwoName}
+    const switchTurns = () => {
+        const crowns = document.querySelectorAll('.current-turn');
+        crowns.forEach((crown) => crown.classList.toggle('soft-hide'))
+    }
+
+
+    const announceGameState = (announce) => {
+        announcements.classList.remove('soft-hide');
+        announcements.textContent = `${announce}`;
+        cells.forEach(cell => cell.disabled = true);
+    }
+
+    return {updateBoard, updatePlayerInfo, switchTurns, announceGameState, playerOneName, playerTwoName}
 }();

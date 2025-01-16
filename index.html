@@ -25,6 +25,7 @@
     </div>
 
     <div class="grid main-container hidden">
+        <div id="announcements" class="soft-hide">Game Started</div>
         <div class="game-board-border">
             <div class="grid game-board">
             
@@ -36,10 +37,9 @@
                 <div class="score" id="PlayerOneScore"></div>
             </div>
             <div id="playerTwo" class="flex-col">
-                <div><span class="player-name"></span> <span class="current-turn"><img src="assets/crown.svg" alt="crown-icon" width="20px"></span></div>
+                <div><span class="player-name"></span> <span class="current-turn soft-hide"><img src="assets/crown.svg" alt="crown-icon" width="20px"></span></div>
                 <div class="score" id="PlayerTwoScore"></div>
             </div>
-
         </div>
         <div class="button-container flex-col">
             <button type="button" id="reset">Reset</button>
