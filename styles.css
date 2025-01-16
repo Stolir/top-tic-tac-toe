@@ -130,6 +130,9 @@ body {
     font-weight: 900;
 }
 
+.board-cell:hover {
+    cursor: pointer;
+}
 
 .player-info {
     color: white;
