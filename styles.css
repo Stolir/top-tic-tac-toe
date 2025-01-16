@@ -110,6 +110,7 @@ body {
     background-color: white;
     height: 540px;
     width: 540px;
+    border: 5px black solid;
 }
 
 .game-board {

@@ -69,6 +69,7 @@ const gameController = function() {
         else {
             currentTurn = players[1];
         }
+        UIController.switchTurns(true, false);
         startGame()
     }
 
@@ -79,6 +80,7 @@ const gameController = function() {
         if (players[0].getMarker() === "O") {
             players.forEach(player => player.toggleMarker())
         }
+        UIController.switchTurns(false, true)
         startGame();
     }
 
@@ -251,9 +253,18 @@ const UIController = function() {
         }
     }
 
-    const switchTurns = () => {
+    const switchTurns = (playAgain = false, resetGame = false) => {
         const crowns = document.querySelectorAll('.current-turn');
-        crowns.forEach((crown) => crown.classList.toggle('soft-hide'))
+        if (!playAgain && !resetGame) {
+            crowns.forEach((crown) => crown.classList.toggle('soft-hide'))
+        }
+        else if (playAgain) {
+            crowns.forEach((crown) => crown.classList.toggle('soft-hide'))
+        }
+        else if (resetGame) {
+            crowns[0].classList.remove('soft-hide')
+            crowns[1].classList.add('soft-hide')
+        }
     }
 
 
