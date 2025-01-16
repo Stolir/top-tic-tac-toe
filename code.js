@@ -76,7 +76,7 @@ const gameController = function() {
         console.log(`Reseting game! Scores will be reset...`)
         currentTurn = players[0];
         players.forEach(player => player.resetScore());
-        if (players[0].getMarker === "O") {
+        if (players[0].getMarker() === "O") {
             players.forEach(player => player.toggleMarker())
         }
         startGame();
@@ -157,6 +157,13 @@ const UIController = function() {
                 cell.textContent = board[i][j];
                 cell.setAttribute("class", "board-cell");
                 cell.setAttribute("type", "button")
+                cell.setAttribute("data-row", `${i}`)
+                cell.setAttribute("data-col", `${j}`)
+                cell.addEventListener('click', () => {
+                    const row = cell.getAttribute("data-row");
+                    const col = cell.getAttribute("data-col");
+                    gameController.playRound(Number(row), Number(col));  
+                })
                 UIBoard.appendChild(cell);
             }
         }
